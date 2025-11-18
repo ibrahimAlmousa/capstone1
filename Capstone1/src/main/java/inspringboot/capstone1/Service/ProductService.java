@@ -48,18 +48,23 @@ public class ProductService {
         return false;
     }
 
-    public ArrayList<Product> sortByPrice(){
-        ArrayList<Product> result = new ArrayList<>(products);
+    public ArrayList<Product> sortByPrice(String categoryID){
+        ArrayList<Product> temp = new ArrayList<>();
 
-        for (int i = 0; i < result.size(); i++)
-            for (int j = 0; j < result.size() - 1; j++)
-                if(result.get(j).getPrice() > result.get(j + 1).getPrice()){
-                    Product temp = result.get(j);
-                    result.set(j, result.get(j + 1));
-                    result.set(j + 1, temp);
+        for(Product p : products)
+            if(p.getCategoryID().equals(categoryID))
+                temp.add(p);
+
+        for(int i = 0 ; i < temp.size() ; i++){
+            for(int j = 0 ; j < temp.size() - i - 1 ; j++){
+                if(temp.get(j).getPrice() > temp.get(j+1).getPrice()){
+                    Product swap = temp.get(j);
+                    temp.set(j, temp.get(j+1));
+                    temp.set(j+1, swap);
                 }
-
-        return result;
+            }
+        }
+        return temp;
     }
 
     public ArrayList<Product> searchProducts(String name){
@@ -72,24 +77,15 @@ public class ProductService {
         return result;
     }
 
-    public ArrayList<Product> getProductsByPriceRange(double min, double max){
-
+    public ArrayList<Product> getProductsByPriceRange(String categoryID , double min , double max){
         ArrayList<Product> result = new ArrayList<>();
-
-        for (int i = 0; i < products.size(); i++)
-            if (products.get(i).getPrice() >= min && products.get(i).getPrice() <= max)
-                result.add(products.get(i));
-
-        for (int i = 0; i < result.size(); i++)
-            for (int j = 0; j < result.size() - 1; j++)
-                if (result.get(j).getPrice() > result.get(j + 1).getPrice()) {
-
-                    Product temp = result.get(j);
-                    result.set(j, result.get(j + 1));
-                    result.set(j + 1, temp);
-                }
-
+        for(Product p : products){
+            if(p.getCategoryID().equals(categoryID) && p.getPrice() >= min && p.getPrice() <= max){
+                result.add(p);
+            }
+        }
         return result;
     }
+
 
 }

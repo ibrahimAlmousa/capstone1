@@ -72,9 +72,9 @@ public class MerchantStockController {
         return ResponseEntity.status(400).body(merchantStockService.buyProduct(userID, productID, merchantID));
     }
 
-    @GetMapping("/get-almost-over")
-    public ResponseEntity<?> getAlmostOver(){
-        return ResponseEntity.status(200).body(merchantStockService.getAlmostOver());
+    @GetMapping("/get-almost-over/{merchantID}")
+    public ResponseEntity<?> getAlmostOver(@PathVariable String merchantID){
+        return ResponseEntity.status(200).body(merchantStockService.getAlmostOver(merchantID));
     }
 
     @GetMapping("/recommended-by-merchant/{merchantID}")

@@ -124,14 +124,14 @@ public class MerchantStockService {
     }
 
 
-    public ArrayList<MerchantStock> getAlmostOver(){
+    public ArrayList<MerchantStock> getAlmostOver(String merchantID){
         ArrayList<MerchantStock> result = new ArrayList<>();
         for(MerchantStock m : merchantStocks) {
-            if (m.getStock()<10){
+            if (m.getMerchantid().equals(merchantID) && m.getStock() < 10){
                 result.add(m);
             }
         }
-        return result ;
+        return result;
     }
 
     public ArrayList<Product> getMerchantProducts(String merchantID){

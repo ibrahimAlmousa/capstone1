@@ -51,10 +51,6 @@ public class ProductController {
         return ResponseEntity.status(400).body(new ApiResponse("Product not found"));
     }
 
-    @GetMapping("/sort-by-price")
-    public ResponseEntity<?> sortByPrice(){
-        return ResponseEntity.status(200).body(productService.sortByPrice());
-    }
 
     @GetMapping("/search/{name}")
     public ResponseEntity<?> searchProducts(@PathVariable String name){
@@ -64,15 +60,25 @@ public class ProductController {
         return ResponseEntity.status(200).body(productService.searchProducts(name));
     }
 
-    @GetMapping("/range/{min}/{max}")
-    public ResponseEntity<?> getProductsByRange(@PathVariable double min, @PathVariable double max){
+    @GetMapping("/range/{categoryID}/{min}/{max}")
+    public ResponseEntity<?> getProductsByRange(
+            @PathVariable String categoryID,
+            @PathVariable double min,
+            @PathVariable double max){
 
+        if(productService.getProductsByPriceRange(categoryID, min, max).isEmpty())
+            return ResponseEntity.status(400).body(new ApiResponse("No products found in this range for this category"));
 
-        if( productService.getProductsByPriceRange(min, max).isEmpty())
-            return ResponseEntity.status(400).body(new ApiResponse("No products found in this range"));
-
-        return ResponseEntity.status(200).body( productService.getProductsByPriceRange(min, max));
+        return ResponseEntity.status(200).body(productService.getProductsByPriceRange(categoryID, min, max));
     }
+
+
+    @GetMapping("/sort-by-price/{categoryID}")
+    public ResponseEntity<?> sortByPrice(@PathVariable String categoryID){
+        return ResponseEntity.status(200).body(productService.sortByPrice(categoryID));
+    }
+
+
 
 }
 
